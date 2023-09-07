@@ -1,5 +1,6 @@
 package com.example.accessingdatamysql;
 
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,13 @@ public class MainController {
 	@Autowired
 	private FeedingEventRepository feedingEventRepository;
 
+	@PostMapping(path="/user")
+	public @ResponseBody String addNewUser(@RequestBody String user) {
+		Gson gson = new Gson();
+		User user1 = gson.fromJson(user, User.class);
+		userRepository.save(user1);
+		return "Saved user";
+	}
 	@PostMapping(path="/spot/add")
 	public @ResponseBody String addNewFeedingSpot (@RequestParam String name) {
 		FeedingSpot feedingSpot = new FeedingSpot();
@@ -40,5 +48,23 @@ public class MainController {
 		}));
 		feedingEventRepository.save(feedingEvent);
 		return "Saved";
+	}
+
+	@GetMapping(path="/feed/all")
+	public @ResponseBody Iterable<FeedingEvent> getAllFeedingEvents() {
+		return feedingEventRepository.findAll();
+	}
+
+
+	@PostMapping(path="/feed/delete")
+	public @ResponseBody String deleteFeedingEvents() {
+		feedingEventRepository.deleteAll();
+		return "Deleted";
+	}
+
+	@PostMapping(path="/spot/delete")
+	public @ResponseBody String deleteSpots() {
+		feedingSpotRepository.deleteAll();
+		return "Deleted";
 	}
 }
