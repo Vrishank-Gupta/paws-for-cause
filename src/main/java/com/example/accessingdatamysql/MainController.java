@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Objects;
+
 @Controller
 @RequestMapping(path="/isb")
 public class MainController {
@@ -55,16 +57,32 @@ public class MainController {
 		return feedingEventRepository.findAll();
 	}
 
+	@DeleteMapping(path = "/feed")
+	public @ResponseBody String deleteFeedEvent(@RequestBody FeedingEvent feedingEvent) throws RuntimeException {
+		Iterable<FeedingEvent> feedingEvents = feedingEventRepository.findAll();
 
-	@PostMapping(path="/feed/delete")
-	public @ResponseBody String deleteFeedingEvents() {
-		feedingEventRepository.deleteAll();
-		return "Deleted";
+		for (FeedingEvent event: feedingEvents) {
+			if (Objects.equals(event.getFeedingSpot().getName(), feedingEvent.getFeedingSpot().getName())) {
+				feedingEventRepository.delete(event);
+				return "Deleted";
+			}
+		}
+		throw new RuntimeException("Could not find given feeding event");
 	}
 
-	@PostMapping(path="/spot/delete")
-	public @ResponseBody String deleteSpots() {
-		feedingSpotRepository.deleteAll();
-		return "Deleted";
+	@DeleteMapping(path = "/spot")
+	public @ResponseBody String deleteFeedingSpot (@RequestBody String name) {
+		Iterable<FeedingSpot> spots = feedingSpotRepository.findAll();
+
+		for (FeedingSpot feedingSpot : spots) {
+			if (feedingSpot.getName().equalsIgnoreCase(name)) {
+				feedingSpotRepository.delete(feedingSpot);
+				return "Deleted";
+			}
+		}
+
+		throw new RuntimeException("Could not find any spot with given name");
 	}
+
+
 }
