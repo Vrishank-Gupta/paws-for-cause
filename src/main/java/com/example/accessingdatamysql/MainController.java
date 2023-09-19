@@ -1,5 +1,5 @@
 package com.example.accessingdatamysql;
-
+//mvn azure-spring-apps:deploy
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -41,13 +41,15 @@ public class MainController {
 
 	@PostMapping(path="/feed")
 	public @ResponseBody String addNewFeedingEvent (@RequestBody String spot) {
-		FeedingEvent feedingEvent = new FeedingEvent();
+		FeedingEvent feedingEvent;
 		Iterable<FeedingSpot> spots = feedingSpotRepository.findAll();
 		spots.forEach( (spot1 -> {
-			if(spot1.getName().equalsIgnoreCase(spot)){
-				feedingEvent.setFeedingSpot(spot1.getName());
-			}
+			if(spot.equalsIgnoreCase(spot1.getName()))
+				feedingSpotRepository.delete(spot1);
 		}));
+		feedingEvent = new FeedingEvent();
+		feedingEvent.setFeedingSpot(spot);
+
 		feedingEventRepository.save(feedingEvent);
 		return "Saved";
 	}
