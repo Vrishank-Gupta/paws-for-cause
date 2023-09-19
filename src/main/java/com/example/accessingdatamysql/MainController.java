@@ -45,7 +45,7 @@ public class MainController {
 		Iterable<FeedingSpot> spots = feedingSpotRepository.findAll();
 		spots.forEach( (spot1 -> {
 			if(spot1.getName().equalsIgnoreCase(spot)){
-				feedingEvent.setFeedingSpot(spot1);
+				feedingEvent.setFeedingSpot(spot1.getName());
 			}
 		}));
 		feedingEventRepository.save(feedingEvent);
@@ -62,7 +62,7 @@ public class MainController {
 		Iterable<FeedingEvent> feedingEvents = feedingEventRepository.findAll();
 
 		for (FeedingEvent event: feedingEvents) {
-			if (Objects.equals(event.getFeedingSpot().getName(), feedingEvent.getFeedingSpot().getName())) {
+			if (Objects.equals(event.getFeedingSpot(), feedingEvent.getFeedingSpot())) {
 				feedingEventRepository.delete(event);
 				return "Deleted";
 			}

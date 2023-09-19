@@ -14,7 +14,7 @@ public class FeedingEvent implements Serializable {
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Integer id;
 
-    public FeedingSpot feedingSpot;
+    public String feedingSpot;
     public String timeOfDay;
 
     public boolean fed = false;
@@ -31,11 +31,11 @@ public class FeedingEvent implements Serializable {
        this.fed = true;
     }
 
-    public FeedingSpot getFeedingSpot() {
+    public String getFeedingSpot() {
         return feedingSpot;
     }
 
-    public void setFeedingSpot(FeedingSpot feedingSpot) {
+    public void setFeedingSpot(String feedingSpot) {
         this.feedingSpot = feedingSpot;
     }
 
