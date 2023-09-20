@@ -9,6 +9,7 @@ import java.util.Objects;
 
 @Controller
 @RequestMapping(path="/isb")
+@CrossOrigin()
 public class MainController {
 	@Autowired
 	private UserRepository userRepository;
@@ -41,30 +42,30 @@ public class MainController {
 
 	@PostMapping(path="/feed")
 	public @ResponseBody String addNewFeedingEvent (@RequestBody String spot) {
-		FeedingEvent feedingEvent;
+		FeedEvent feedEvent;
 		Iterable<FeedingSpot> spots = feedingSpotRepository.findAll();
 		spots.forEach( (spot1 -> {
 			if(spot.equalsIgnoreCase(spot1.getName()))
 				feedingSpotRepository.delete(spot1);
 		}));
-		feedingEvent = new FeedingEvent();
-		feedingEvent.setFeedingSpot(spot);
+		feedEvent = new FeedEvent();
+		feedEvent.setFeedingSpot(spot);
 
-		feedingEventRepository.save(feedingEvent);
+		feedingEventRepository.save(feedEvent);
 		return "Saved";
 	}
 
 	@GetMapping(path="/feed/all")
-	public @ResponseBody Iterable<FeedingEvent> getAllFeedingEvents() {
+	public @ResponseBody Iterable<FeedEvent> getAllFeedingEvents() {
 		return feedingEventRepository.findAll();
 	}
 
 	@DeleteMapping(path = "/feed")
-	public @ResponseBody String deleteFeedEvent(@RequestBody FeedingEvent feedingEvent) throws RuntimeException {
-		Iterable<FeedingEvent> feedingEvents = feedingEventRepository.findAll();
+	public @ResponseBody String deleteFeedEvent(@RequestBody FeedEvent feedEvent) throws RuntimeException {
+		Iterable<FeedEvent> feedingEvents = feedingEventRepository.findAll();
 
-		for (FeedingEvent event: feedingEvents) {
-			if (Objects.equals(event.getFeedingSpot(), feedingEvent.getFeedingSpot())) {
+		for (FeedEvent event: feedingEvents) {
+			if (Objects.equals(event.getFeedingSpot(), feedEvent.getFeedingSpot())) {
 				feedingEventRepository.delete(event);
 				return "Deleted";
 			}

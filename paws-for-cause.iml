@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module version="4">
+  <component name="FacetManager">
+    <facet type="azure" name="Azure">
+      <configuration>
+        <option name="dotAzurePath" value="D:\gs-accessing-data-mysql-main\gs-accessing-data-mysql-main\complete\.azure" />
+      </configuration>
+    </facet>
+  </component>
+</module>

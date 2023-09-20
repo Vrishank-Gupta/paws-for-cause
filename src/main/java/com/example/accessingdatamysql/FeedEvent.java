@@ -8,8 +8,12 @@ import jakarta.persistence.Id;
 import java.io.Serializable;
 import java.util.Calendar;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 @Entity
-public class FeedingEvent implements Serializable {
+public class FeedEvent implements Serializable {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Integer id;
@@ -19,14 +23,19 @@ public class FeedingEvent implements Serializable {
 
     public boolean fed = false;
 
-    public FeedingEvent() {
-        Calendar c = Calendar.getInstance();
-        this.timeOfDay = getTime(c.get(Calendar.HOUR_OF_DAY));
+    public FeedEvent() {
+        LocalDateTime localDateTime = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        // Set the time zone to IST (Indian Standard Time)
+        ZoneId istZone = ZoneId.of("Asia/Kolkata");
+        ZonedDateTime istDateTime = ZonedDateTime.of(localDateTime, istZone);
+
+        this.timeOfDay = istDateTime.format(formatter);
         this.fed = true;
     }
 
-
-    public FeedingEvent(String timeOfDay) {
+    public FeedEvent(String timeOfDay) {
        this.timeOfDay = timeOfDay;
        this.fed = true;
     }
@@ -61,9 +70,10 @@ public class FeedingEvent implements Serializable {
 
     @Override
     public String toString() {
-        return "FeedingEvent{" +
-                "feedingSpot=" + feedingSpot +
-                ", timeOfDay='" + timeOfDay + '\'' +
+        return "FeedEvent{" +
+                "id=" + id +
+                ", feedingSpot='" + feedingSpot + '\'' +
+                ", timeOfDay=" + timeOfDay +
                 ", fed=" + fed +
                 '}';
     }
